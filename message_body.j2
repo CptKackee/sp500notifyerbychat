@@ -1,4 +1,9 @@
 SMA-Auswertung für {{ symbols[0].name }} ({{ symbols[0].symbol }})
+
 {% for window in sma_windows %}
 SMA{{ window }} Abstand: {{ "%.2f"|format(symbols[0].data["Distance SMA" + window|string].iloc[-1] * 100) }}%
+{% endfor %}
+
+{% for note in cross_msgs %}
+{{ note }}
 {% endfor %}
