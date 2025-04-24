@@ -2,7 +2,7 @@ name: Run S&P500 Notifyer
 
 on:
   schedule:
-    - cron: '0 22 * * *'
+    - cron: '0 19 * * *'
   workflow_dispatch:
 
 jobs:
