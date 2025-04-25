@@ -6,7 +6,6 @@ import yfinance as yf
 from jinja2 import Environment, FileSystemLoader
 from matplotlib import pyplot as plt
 
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("sp500notifyer")
 
@@ -19,9 +18,9 @@ def check_price_crossover(df, sma_window):
     sma_today = df[f"SMA{sma_window}"].iloc[-1]
     sma_yesterday = df[f"SMA{sma_window}"].iloc[-2]
 
-    if (close_yesterday < sma_yesterday and close_today > sma_today):
+    if close_yesterday < sma_yesterday and close_today > sma_today:
         return f"⚠️ Kurs hat SMA{sma_window} nach oben durchbrochen"
-    elif (close_yesterday > sma_yesterday and close_today < sma_today):
+    elif close_yesterday > sma_yesterday and close_today < sma_today:
         return f"⚠️ Kurs hat SMA{sma_window} nach unten durchbrochen"
     return None
 
@@ -71,15 +70,17 @@ class Notifyer:
                 )
 
     def generate_graph_for_main_symbol(self):
-        df = self.stoke_data[0]["data"].tail(self.config.getint("reporting", "datapoints_for_graph"))
+        df = self.stoke_data[0]["data"]
+        df = df.tail(10)  # Zeige nur letzte 10 Tage im Plot
         cols = ["Close"] + [f"SMA{w}" for w in self.__get_sma_windows()]
         plt.style.use("ggplot")
-        fig, ax = plt.subplots(figsize=(10, 4))
-        df[cols].plot(ax=ax, linewidth=1.2)
-        ax.set_title(self.stoke_data[0]["name"], fontsize=12)
+        fig, ax = plt.subplots(figsize=(5, 8))  # Hochformat für bessere Anzeige auf iPhone
+        df[cols].plot(ax=ax, linewidth=1.5)
+        ax.set_title(self.stoke_data[0]["name"], fontsize=14)
         ax.set_xlabel("")
         ax.set_ylabel("")
-        ax.legend().set_visible(False)
+        ax.grid(True, linestyle="--", alpha=0.5)
+        ax.legend(loc="upper left", fontsize=8, frameon=False)
         for spine in ax.spines.values():
             spine.set_visible(False)
         buf = io.BytesIO()
