@@ -71,7 +71,7 @@ class Notifyer:
 
     def generate_graph_for_main_symbol(self):
         df = self.stoke_data[0]["data"]
-        df = df.tail(10)  # Zeige nur letzte 10 Tage im Plot
+        df = df.tail(100)  # Zeige nur letzte 10 Tage im Plot
         cols = ["Close"] + [f"SMA{w}" for w in self.__get_sma_windows()]
         plt.style.use("ggplot")
         fig, ax = plt.subplots(figsize=(5, 8))  # Hochformat für bessere Anzeige auf iPhone
